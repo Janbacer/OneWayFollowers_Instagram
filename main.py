@@ -19,15 +19,25 @@ def extract_usernames_from_json(file_path):
         usernames = set()
         if isinstance(data, list):
             for entry in data:
+                # Handle {"string_list_data": [...]}
                 if isinstance(entry, dict) and "string_list_data" in entry:
                     for item in entry["string_list_data"]:
-                        usernames.add(item.get("value", "").strip())
+                        if "value" in item:
+                            usernames.add(item["value"].strip())
+                # Handle {"value": ...}
+                elif isinstance(entry, dict) and "value" in entry:
+                    usernames.add(entry["value"].strip())
         elif isinstance(data, dict):
             for key in data:
                 if isinstance(data[key], list):
                     for entry in data[key]:
-                        if isinstance(entry, dict) and "value" in entry:
-                            usernames.add(entry["value"].strip())
+                        if isinstance(entry, dict):
+                            if "string_list_data" in entry:
+                                for item in entry["string_list_data"]:
+                                    if "value" in item:
+                                        usernames.add(item["value"].strip())
+                            elif "value" in entry:
+                                usernames.add(entry["value"].strip())
         return usernames
 
 def find_file(filenames, root_dir="."):
@@ -92,6 +102,10 @@ def show_result_window(non_followers, pending_requests):
     result_window.title("Instagram Analysis Result")
     result_window.geometry("700x600")
 
+    # More visible watermark label with copyright symbol
+    watermark = tk.Label(result_window, text="Made by Janbacer CC", font=("Arial", 12), fg="#888888", anchor="se")
+    watermark.place(relx=1.0, rely=1.0, anchor="se")
+
     label1 = tk.Label(result_window, text="People you follow who don't follow you back:", font=("Arial", 12, "bold"))
     label1.pack(pady=(10, 0))
 
@@ -135,6 +149,9 @@ def main():
     label.pack(pady=20)
     btn = tk.Button(root, text="Select ZIP", command=select_zip_and_process, font=("Arial", 12))
     btn.pack(pady=10)
+    # More visible watermark in main window with copyright symbol
+    watermark = tk.Label(root, text="Made by Janbacer CC", font=("Arial", 12), fg="#888888", anchor="se")
+    watermark.place(relx=1.0, rely=1.0, anchor="se")
     root.mainloop()
 
 if __name__ == "__main__":
