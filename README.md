@@ -1,4 +1,7 @@
-# Instagram Non-Followers Checker
+# Instagram One-Way Followers 
+
+Have you ever wanted to know who are you flloiwng but doesnt follow back?
+With this tool now you can easily unfollow, disloyal followers
 
 This tool helps you analyze your Instagram data export to find out:
 - Who you follow that doesn't follow you back
