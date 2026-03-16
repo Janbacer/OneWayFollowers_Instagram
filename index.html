@@ -4,18 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Instagram One-Way Followers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-1: #f7f3ec;
-      --bg-2: #f2e7d7;
-      --ink: #1f1b16;
-      --muted: #6a5f52;
-      --card: rgba(255, 255, 255, 0.78);
-      --line: rgba(31, 27, 22, 0.14);
-      --accent: #c54a2f;
-      --accent-2: #2f6f7e;
-      --shadow: 0 18px 45px rgba(35, 23, 10, 0.12);
-      --radius: 18px;
+      --bg-1: #fdf4e9;
+      --bg-2: #f7dfc9;
+      --ink: #18120e;
+      --muted: #5f5247;
+      --card: rgba(255, 255, 255, 0.86);
+      --line: rgba(24, 18, 14, 0.12);
+      --accent: #d24527;
+      --accent-2: #0f6b75;
+      --ok: #0f7752;
+      --warn: #9f3f1f;
+      --shadow: 0 20px 52px rgba(43, 23, 9, 0.16);
+      --radius: 20px;
     }
 
     * {
@@ -26,21 +31,21 @@
       margin: 0;
       min-height: 100vh;
       color: var(--ink);
-      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      font-family: "Sora", sans-serif;
       line-height: 1.5;
       background:
-        radial-gradient(60rem 30rem at -10% -10%, #ffe5c1 0%, transparent 60%),
-        radial-gradient(60rem 30rem at 110% 120%, #cfeaf0 0%, transparent 60%),
-        linear-gradient(160deg, var(--bg-1), var(--bg-2));
-      padding: 24px;
+        radial-gradient(64rem 36rem at -10% -8%, #ffd49d 0%, transparent 66%),
+        radial-gradient(64rem 36rem at 115% 122%, #c9edf1 0%, transparent 62%),
+        linear-gradient(156deg, var(--bg-1), var(--bg-2));
+      padding: 22px;
     }
 
     .wrap {
-      max-width: 960px;
+      max-width: 1040px;
       margin: 0 auto;
       display: grid;
-      gap: 18px;
-      animation: rise 560ms ease-out;
+      gap: 16px;
+      animation: rise 640ms ease-out;
     }
 
     .hero,
@@ -53,23 +58,10 @@
       padding: 22px;
     }
 
-    .badge {
-      display: inline-block;
-      background: #fce7cf;
-      border: 1px solid #e5c8a6;
-      color: #6d3a21;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      border-radius: 999px;
-      padding: 8px 12px;
-      margin-bottom: 10px;
-      font-size: 0.86rem;
-    }
-
     h1 {
       margin: 0;
       line-height: 1.15;
-      font-size: clamp(1.7rem, 5vw, 2.5rem);
+      font-size: clamp(1.75rem, 5vw, 2.8rem);
     }
 
     p {
@@ -88,6 +80,67 @@
       font-size: 1.2rem;
     }
 
+    .lead {
+      max-width: 72ch;
+    }
+
+    .file-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .file-input {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.84rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      max-width: 100%;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(120deg, var(--accent), #e76a2a);
+      color: #fff;
+      font: 700 0.96rem "Sora", sans-serif;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: transform 180ms ease, filter 180ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: saturate(1.08);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.72;
+      transform: none;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      min-height: 1.4em;
+    }
+
+    .status.ok {
+      color: var(--ok);
+      font-weight: 600;
+    }
+
+    .status.error {
+      color: var(--warn);
+      font-weight: 600;
+    }
+
     ul,
     ol {
       margin: 10px 0 0;
@@ -98,19 +151,49 @@
       margin-top: 6px;
     }
 
-    pre {
-      margin: 12px 0 0;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.7);
-      overflow-x: auto;
-      font-size: 0.92rem;
+    .result-shell {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 4px;
     }
 
-    .k {
-      color: var(--accent-2);
+    .result-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 14px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .result-title {
+      margin: 0;
+      font-size: 1rem;
       font-weight: 700;
+    }
+
+    .names {
+      margin-top: 10px;
+      column-count: 3;
+      column-gap: 14px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.87rem;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .name {
+      break-inside: avoid;
+      margin: 0 0 4px;
+      color: #2f2a23;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 12px;
     }
 
     .footer {
@@ -144,52 +227,242 @@
       .grid {
         grid-template-columns: 1fr;
       }
+
+      .result-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .names {
+        column-count: 2;
+      }
     }
   </style>
 </head>
 <body>
   <main class="wrap">
     <section class="hero">
-      <span class="badge">WORKING AS OF 12-03-2026 | INSTAGRAM 420.0.0.55.74</span>
       <h1>Instagram One-Way Followers Checker</h1>
-      <p>
-        Analyze your exported Instagram ZIP and find people you follow who do not follow back,
-        plus pending follow requests.
+      <p class="lead">
+        This website runs the same core logic as your Python script: it reads your Instagram export ZIP,
+        finds following, followers, and pending request files, then computes who does not follow you back.
       </p>
-    </section>
-
-    <section class="grid">
-      <article class="panel">
-        <h2>Dependencies</h2>
-        <ul>
-          <li>Python 3.9+</li>
-          <li><span class="k">beautifulsoup4</span></li>
-          <li>Tkinter (included with standard Python on most installs)</li>
-        </ul>
-        <pre>python -m pip install --user beautifulsoup4</pre>
-      </article>
-
-      <article class="panel">
-        <h2>Run</h2>
-        <ol>
-          <li>Download your Instagram export ZIP.</li>
-          <li>Start the app from terminal:</li>
-        </ol>
-        <pre>python main.py</pre>
-        <p>The app opens a file picker so you can select your ZIP.</p>
-      </article>
+      <div class="file-row">
+        <input id="zipInput" class="file-input" type="file" accept=".zip" />
+        <button id="analyzeBtn" class="btn" type="button">Analyze ZIP</button>
+      </div>
+      <div id="status" class="status" aria-live="polite"></div>
     </section>
 
     <section class="panel">
-      <h2>What You Get</h2>
-      <ul>
-        <li>People you follow who do not follow you back</li>
-        <li>Pending follow requests</li>
-        <li>Local processing only; your data stays on your computer</li>
-      </ul>
+      <h2>Results</h2>
+      <div class="result-shell">
+        <article class="result-box">
+          <h3 id="nonFollowersTitle" class="result-title">People you follow who do not follow you back (0)</h3>
+          <div id="nonFollowersList" class="names"></div>
+          <p id="nonFollowersEmpty" class="empty">Upload and analyze a ZIP to see results.</p>
+        </article>
+        <article class="result-box">
+          <h3 id="pendingTitle" class="result-title">Pending follow requests (0)</h3>
+          <div id="pendingList" class="names"></div>
+          <p id="pendingEmpty" class="empty">Upload and analyze a ZIP to see results.</p>
+        </article>
+      </div>
     </section>
 
     <div class="footer">Made by Janbacer CC</div>
   </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-xXDvecyYQ0Z6SgL0z8nxM4G9QfP9fJq0gGf4bm/FvGV8eK3opgDdBrYqKqRR3YKHyCuXapnwYfJOLw1Aun1v8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    const zipInput = document.getElementById("zipInput");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const statusEl = document.getElementById("status");
+
+    const nonFollowersTitle = document.getElementById("nonFollowersTitle");
+    const pendingTitle = document.getElementById("pendingTitle");
+    const nonFollowersList = document.getElementById("nonFollowersList");
+    const pendingList = document.getElementById("pendingList");
+    const nonFollowersEmpty = document.getElementById("nonFollowersEmpty");
+    const pendingEmpty = document.getElementById("pendingEmpty");
+
+    const followingNames = ["following.html", "following.json"];
+    const followersNames = ["followers.html", "followers_1.html", "followers.json", "followers_1.json"];
+    const pendingNames = ["pending_follow_requests.html", "pending_follow_requests.json"];
+
+    function setStatus(text, kind = "") {
+      statusEl.textContent = text;
+      statusEl.className = kind ? `status ${kind}` : "status";
+    }
+
+    function parseHtmlUsernames(content) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(content, "text/html");
+      const anchors = Array.from(doc.querySelectorAll("a"));
+      return new Set(anchors.map((a) => a.textContent.trim()).filter(Boolean));
+    }
+
+    function parseJsonUsernames(content) {
+      const data = JSON.parse(content);
+      const usernames = new Set();
+
+      function parseEntry(entry) {
+        if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
+          return;
+        }
+
+        if (typeof entry.title === "string" && entry.title.trim()) {
+          usernames.add(entry.title.trim());
+        }
+
+        if (Array.isArray(entry.string_list_data)) {
+          for (const item of entry.string_list_data) {
+            if (item && typeof item.value === "string" && item.value.trim()) {
+              usernames.add(item.value.trim());
+            }
+          }
+        }
+
+        if (typeof entry.value === "string" && entry.value.trim()) {
+          usernames.add(entry.value.trim());
+        }
+      }
+
+      function walk(node) {
+        if (Array.isArray(node)) {
+          for (const item of node) {
+            parseEntry(item);
+            walk(item);
+          }
+          return;
+        }
+
+        if (node && typeof node === "object") {
+          parseEntry(node);
+          for (const value of Object.values(node)) {
+            walk(value);
+          }
+        }
+      }
+
+      walk(data);
+      return usernames;
+    }
+
+    async function extractUsernamesFromZipEntry(entry) {
+      const content = await entry.async("string");
+      if (entry.name.toLowerCase().endsWith(".html")) {
+        return parseHtmlUsernames(content);
+      }
+      if (entry.name.toLowerCase().endsWith(".json")) {
+        return parseJsonUsernames(content);
+      }
+      return new Set();
+    }
+
+    function findZipFile(zip, candidates) {
+      const entries = Object.values(zip.files).filter((entry) => !entry.dir);
+      for (const candidate of candidates) {
+        const lowerCandidate = candidate.toLowerCase();
+        const found = entries.find((entry) => {
+          const name = entry.name.toLowerCase();
+          return name === lowerCandidate || name.endsWith("/" + lowerCandidate);
+        });
+        if (found) {
+          return found;
+        }
+      }
+      return null;
+    }
+
+    function setDifference(source, subtract) {
+      const result = [];
+      for (const item of source) {
+        if (!subtract.has(item)) {
+          result.push(item);
+        }
+      }
+      return result;
+    }
+
+    function renderNames(container, emptyEl, items, emptyMessage) {
+      container.innerHTML = "";
+      if (!items.length) {
+        emptyEl.textContent = emptyMessage;
+        emptyEl.style.display = "block";
+        return;
+      }
+      emptyEl.style.display = "none";
+      for (const name of items) {
+        const p = document.createElement("p");
+        p.className = "name";
+        p.textContent = name;
+        container.appendChild(p);
+      }
+    }
+
+    async function analyzeZip() {
+      const file = zipInput.files[0];
+      if (!file) {
+        setStatus("Select your Instagram ZIP file first.", "error");
+        return;
+      }
+
+      if (typeof JSZip === "undefined") {
+        setStatus("Could not load JSZip dependency. Refresh and try again.", "error");
+        return;
+      }
+
+      analyzeBtn.disabled = true;
+      setStatus("Reading ZIP and analyzing files...");
+
+      try {
+        const zip = await JSZip.loadAsync(file);
+
+        const followingFile = findZipFile(zip, followingNames);
+        const followersFile = findZipFile(zip, followersNames);
+        const pendingFile = findZipFile(zip, pendingNames);
+
+        if (!followingFile || !followersFile) {
+          setStatus("Could not find both following and followers files in the ZIP.", "error");
+          return;
+        }
+
+        const following = await extractUsernamesFromZipEntry(followingFile);
+        const followers = await extractUsernamesFromZipEntry(followersFile);
+        const nonFollowers = setDifference(following, followers).sort((a, b) => a.localeCompare(b));
+
+        let pendingRequests = [];
+        if (pendingFile) {
+          const pendingSet = await extractUsernamesFromZipEntry(pendingFile);
+          pendingRequests = Array.from(pendingSet).sort((a, b) => a.localeCompare(b));
+        }
+
+        nonFollowersTitle.textContent = `People you follow who do not follow you back (${nonFollowers.length})`;
+        pendingTitle.textContent = `Pending follow requests (${pendingRequests.length})`;
+
+        renderNames(
+          nonFollowersList,
+          nonFollowersEmpty,
+          nonFollowers,
+          "Everyone you follow follows you back."
+        );
+
+        renderNames(
+          pendingList,
+          pendingEmpty,
+          pendingRequests,
+          "No pending follow requests found."
+        );
+
+        setStatus("Analysis complete. Results updated.", "ok");
+      } catch (error) {
+        setStatus(`Failed to process ZIP: ${error.message}`, "error");
+      } finally {
+        analyzeBtn.disabled = false;
+      }
+    }
+
+    analyzeBtn.addEventListener("click", analyzeZip);
+  </script>
 </body>
 </html>
