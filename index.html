@@ -412,13 +412,7 @@
       animation: none !important;
     }
 
-    /* Debug Hitboxes */
-    .debug-hitbox {
-      border: 2px solid rgba(255, 0, 0, 0.6);
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-    }
+
 
     @media (max-width: 760px) {
       .result-shell {
@@ -564,27 +558,7 @@
         objA.y + objA.h > objB.y;
     }
 
-    function renderDebugHitbox(obj, color = 'red') {
-      let debugEl = document.getElementById('debug-' + (obj.id || 'mario' || Math.random()));
-      if (!debugEl) {
-        debugEl = document.createElement('div');
-        if (obj.id) debugEl.id = 'debug-' + obj.id;
-        debugEl.className = 'debug-hitbox';
-        document.body.appendChild(debugEl);
-      }
-      debugEl.style.left = obj.x + 'px';
-      debugEl.style.bottom = (floorY + obj.y) + 'px';
-      debugEl.style.width = obj.w + 'px';
-      debugEl.style.height = obj.h + 'px';
-      debugEl.style.borderColor = color;
-    }
 
-    function clearDebugHitboxes() {
-      // Clear obstacle/coin debug boxes which change frequently
-      document.querySelectorAll('.debug-hitbox').forEach(el => {
-        if (!el.id.includes('mario') && !el.id.includes('k')) el.remove();
-      });
-    }
 
     // Input handlers
     window.addEventListener('keydown', e => {
@@ -734,16 +708,7 @@
         ent.el.style.left = ent.x + 'px';
         ent.el.style.bottom = (floorY + ent.y) + 'px';
         ent.el.style.transform = `scaleX(${ent.vx >= 0 ? -1 : 1})`;
-        renderDebugHitbox(ent, 'orange');
       });
-
-      // Render Obstacle Hitboxes
-      clearDebugHitboxes();
-      obs.forEach((o, i) => {
-        renderDebugHitbox({ ...o, id: 'obs-' + i }, 'red');
-      });
-      // Render Mario Hitbox
-      renderDebugHitbox({ ...mario, id: 'mario' }, 'green');
 
       requestAnimationFrame(updateGame);
     }
