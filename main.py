@@ -111,7 +111,7 @@ def show_result_window(non_followers, pending_requests):
     watermark = tk.Label(result_window, text="Made by Janbacer CC", font=("Arial", 12), fg="#888888", anchor="se")
     watermark.place(relx=1.0, rely=1.0, anchor="se")
 
-    label1 = tk.Label(result_window, text="People you follow who don't follow you back:", font=("Arial", 12, "bold"))
+    label1 = tk.Label(result_window, text=f"People you follow who don't follow you back ({len(non_followers)}):", font=("Arial", 12, "bold"))
     label1.pack(pady=(10, 0))
 
     text1 = scrolledtext.ScrolledText(result_window, width=90, height=15, font=("Consolas", 10))
@@ -122,7 +122,7 @@ def show_result_window(non_followers, pending_requests):
         text1.insert(tk.END, "Everyone you follow follows you back!")
     text1.configure(state='disabled')
 
-    label2 = tk.Label(result_window, text="Pending follow requests:", font=("Arial", 12, "bold"))
+    label2 = tk.Label(result_window, text=f"Pending follow requests ({len(pending_requests)}):", font=("Arial", 12, "bold"))
     label2.pack(pady=(10, 0))
 
     text2 = scrolledtext.ScrolledText(result_window, width=90, height=10, font=("Consolas", 10))
