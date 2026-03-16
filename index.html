@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram One-Way Followers</title>
+  <style>
+    :root {
+      --bg-1: #f7f3ec;
+      --bg-2: #f2e7d7;
+      --ink: #1f1b16;
+      --muted: #6a5f52;
+      --card: rgba(255, 255, 255, 0.78);
+      --line: rgba(31, 27, 22, 0.14);
+      --accent: #c54a2f;
+      --accent-2: #2f6f7e;
+      --shadow: 0 18px 45px rgba(35, 23, 10, 0.12);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      line-height: 1.5;
+      background:
+        radial-gradient(60rem 30rem at -10% -10%, #ffe5c1 0%, transparent 60%),
+        radial-gradient(60rem 30rem at 110% 120%, #cfeaf0 0%, transparent 60%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2));
+      padding: 24px;
+    }
+
+    .wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+      animation: rise 560ms ease-out;
+    }
+
+    .hero,
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(4px);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #fce7cf;
+      border: 1px solid #e5c8a6;
+      color: #6d3a21;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      border-radius: 999px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      font-size: 0.86rem;
+    }
+
+    h1 {
+      margin: 0;
+      line-height: 1.15;
+      font-size: clamp(1.7rem, 5vw, 2.5rem);
+    }
+
+    p {
+      margin: 10px 0 0;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+    }
+
+    ul,
+    ol {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.7);
+      overflow-x: auto;
+      font-size: 0.92rem;
+    }
+
+    .k {
+      color: var(--accent-2);
+      font-weight: 700;
+    }
+
+    .footer {
+      text-align: right;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 4px 4px 0;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 14px;
+      }
+
+      .hero,
+      .panel {
+        padding: 16px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <span class="badge">WORKING AS OF 12-03-2026 | INSTAGRAM 420.0.0.55.74</span>
+      <h1>Instagram One-Way Followers Checker</h1>
+      <p>
+        Analyze your exported Instagram ZIP and find people you follow who do not follow back,
+        plus pending follow requests.
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <h2>Dependencies</h2>
+        <ul>
+          <li>Python 3.9+</li>
+          <li><span class="k">beautifulsoup4</span></li>
+          <li>Tkinter (included with standard Python on most installs)</li>
+        </ul>
+        <pre>python -m pip install --user beautifulsoup4</pre>
+      </article>
+
+      <article class="panel">
+        <h2>Run</h2>
+        <ol>
+          <li>Download your Instagram export ZIP.</li>
+          <li>Start the app from terminal:</li>
+        </ol>
+        <pre>python main.py</pre>
+        <p>The app opens a file picker so you can select your ZIP.</p>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>What You Get</h2>
+      <ul>
+        <li>People you follow who do not follow you back</li>
+        <li>Pending follow requests</li>
+        <li>Local processing only; your data stays on your computer</li>
+      </ul>
+    </section>
+
+    <div class="footer">Made by Janbacer CC</div>
+  </main>
+</body>
+</html>
