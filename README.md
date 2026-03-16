@@ -1,3 +1,14 @@
+# 🍄 Super One-Way Followers Bros 🍄
+
+## 🌟 [MARIO-themed WEBSITE](https://janbacer.github.io/OneWayFollowers_Instagram/) 🌟
+
+### 🕹️ Web Edition Highlights:
+- **Live Physics:** Mario and Koopas roam your results!
+- **Interactive:** Stomp, kick shells, and collect coins!
+- **Zero-Install:** Analyze your data directly in your browser.
+
+---
+
 # Instagram One-Way Followers 
 
 Have you ever wanted to know who are you flloiwng but doesnt follow back?
