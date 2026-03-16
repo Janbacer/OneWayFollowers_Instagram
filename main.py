@@ -17,27 +17,32 @@ def extract_usernames_from_json(file_path):
     with open(file_path, encoding="utf-8") as f:
         data = json.load(f)
         usernames = set()
+
+        def parse_entry(entry):
+            if not isinstance(entry, dict):
+                return
+            # 1. Try "title" (often contains the username in following.json)
+            if "title" in entry and entry["title"]:
+                usernames.add(entry["title"].strip())
+            # 2. Try "string_list_data" -> "value"
+            if "string_list_data" in entry and isinstance(entry["string_list_data"], list):
+                for item in entry["string_list_data"]:
+                    if isinstance(item, dict) and "value" in item:
+                        usernames.add(item["value"].strip())
+            # 3. Try direct "value"
+            if "value" in entry and entry["value"]:
+                usernames.add(entry["value"].strip())
+
         if isinstance(data, list):
             for entry in data:
-                # Handle {"string_list_data": [...]}
-                if isinstance(entry, dict) and "string_list_data" in entry:
-                    for item in entry["string_list_data"]:
-                        if "value" in item:
-                            usernames.add(item["value"].strip())
-                # Handle {"value": ...}
-                elif isinstance(entry, dict) and "value" in entry:
-                    usernames.add(entry["value"].strip())
+                parse_entry(entry)
         elif isinstance(data, dict):
-            for key in data:
-                if isinstance(data[key], list):
-                    for entry in data[key]:
-                        if isinstance(entry, dict):
-                            if "string_list_data" in entry:
-                                for item in entry["string_list_data"]:
-                                    if "value" in item:
-                                        usernames.add(item["value"].strip())
-                            elif "value" in entry:
-                                usernames.add(entry["value"].strip())
+            for value in data.values():
+                if isinstance(value, list):
+                    for entry in value:
+                        parse_entry(entry)
+                elif isinstance(value, dict):
+                    parse_entry(value)
         return usernames
 
 def find_file(filenames, root_dir="."):
@@ -106,7 +111,7 @@ def show_result_window(non_followers, pending_requests):
     watermark = tk.Label(result_window, text="Made by Janbacer CC", font=("Arial", 12), fg="#888888", anchor="se")
     watermark.place(relx=1.0, rely=1.0, anchor="se")
 
-    label1 = tk.Label(result_window, text="People you follow who don't follow you back:", font=("Arial", 12, "bold"))
+    label1 = tk.Label(result_window, text=f"People you follow who don't follow you back ({len(non_followers)}):", font=("Arial", 12, "bold"))
     label1.pack(pady=(10, 0))
 
     text1 = scrolledtext.ScrolledText(result_window, width=90, height=15, font=("Consolas", 10))
@@ -117,7 +122,7 @@ def show_result_window(non_followers, pending_requests):
         text1.insert(tk.END, "Everyone you follow follows you back!")
     text1.configure(state='disabled')
 
-    label2 = tk.Label(result_window, text="Pending follow requests:", font=("Arial", 12, "bold"))
+    label2 = tk.Label(result_window, text=f"Pending follow requests ({len(pending_requests)}):", font=("Arial", 12, "bold"))
     label2.pack(pady=(10, 0))
 
     text2 = scrolledtext.ScrolledText(result_window, width=90, height=10, font=("Consolas", 10))
