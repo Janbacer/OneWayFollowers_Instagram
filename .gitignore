@@ -1,0 +1,14 @@
+# Ignore everything
+/*
+
+# But not the following
+!main.py
+!README.md
+!OneWayFollowers.exe
+!index.html
+!game_assets/
+!.gitignore
+
+# Ignore specific large or redundant items
+*.zip
+super-midu-bros-main/
