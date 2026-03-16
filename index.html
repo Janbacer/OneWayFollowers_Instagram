@@ -1,297 +1,777 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Instagram One-Way Followers</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <title>Super One-Way Followers Bros</title>
   <style>
+    @font-face {
+      font-family: 'SuperMario';
+      src: url('./super-midu-bros-main/assets/fonts/SuperMario.ttf') format('truetype');
+    }
+
     :root {
-      --bg-1: #fdf4e9;
-      --bg-2: #f7dfc9;
+      --mario-sky: #5c94fc;
+      --mario-ground: #e76a2a;
+      --mario-brick: #8b4513;
+      --mario-yellow: #f8d800;
+      --mario-white: #ffffff;
+      --mario-black: #000000;
       --ink: #18120e;
-      --muted: #5f5247;
-      --card: rgba(255, 255, 255, 0.86);
-      --line: rgba(24, 18, 14, 0.12);
-      --accent: #d24527;
-      --accent-2: #0f6b75;
-      --ok: #0f7752;
-      --warn: #9f3f1f;
-      --shadow: 0 20px 52px rgba(43, 23, 9, 0.16);
-      --radius: 20px;
+      --card: rgba(255, 255, 255, 0.9);
     }
 
     * {
       box-sizing: border-box;
+      image-rendering: pixelated;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
       color: var(--ink);
-      font-family: "Sora", sans-serif;
-      line-height: 1.5;
-      background:
-        radial-gradient(64rem 36rem at -10% -8%, #ffd49d 0%, transparent 66%),
-        radial-gradient(64rem 36rem at 115% 122%, #c9edf1 0%, transparent 62%),
-        linear-gradient(156deg, var(--bg-1), var(--bg-2));
-      padding: 22px;
+      font-family: 'SuperMario', 'Courier New', Courier, monospace;
+      background-color: var(--mario-sky);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 120px;
     }
 
+    /* Scenery */
+    .scenery-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .cloud {
+      position: absolute;
+      width: 200px;
+      height: 100px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: drift linear infinite;
+    }
+
+    .cloud1 {
+      background-image: url('./super-midu-bros-main/assets/scenery/overworld/cloud1.png');
+    }
+
+    .cloud2 {
+      background-image: url('./super-midu-bros-main/assets/scenery/overworld/cloud2.png');
+    }
+
+    @keyframes drift {
+      from {
+        transform: translateX(100vw);
+      }
+
+      to {
+        transform: translateX(-400px);
+      }
+    }
+
+    .floor {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 96px;
+      background-image: url('./super-midu-bros-main/assets/scenery/overworld/floorbricks.png');
+      background-repeat: repeat-x;
+      background-size: 96px 96px;
+      z-index: 10;
+    }
+
+    .mountain {
+      position: fixed;
+      bottom: 40px;
+      /* Moved down */
+      width: 600px;
+      height: 300px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      z-index: -2;
+      opacity: 0.5;
+      /* More transparent */
+    }
+
+    .mountain1 {
+      background-image: url('./super-midu-bros-main/assets/scenery/overworld/mountain1.png');
+      left: -5%;
+    }
+
+    .mountain2 {
+      background-image: url('./super-midu-bros-main/assets/scenery/overworld/mountain2.png');
+      right: -10%;
+    }
+
+    .pipe {
+      position: fixed;
+      bottom: 96px;
+      width: 100px;
+      height: 120px;
+      background-image: url('./super-midu-bros-main/assets/scenery/pipe1.png');
+      background-size: 100px 120px;
+      background-repeat: no-repeat;
+      z-index: 5;
+    }
+
+    .block {
+      position: fixed;
+      width: 64px;
+      height: 64px;
+      background-image: url('./super-midu-bros-main/assets/blocks/overworld/misteryBlock.png');
+      background-size: cover;
+      z-index: 5;
+    }
+
+    .coin {
+      position: fixed;
+      width: 32px;
+      height: 48px;
+      background-image: url('./super-midu-bros-main/assets/collectibles/coin.png');
+      background-size: cover;
+      z-index: 4;
+      animation: coinRotate 0.6s steps(4) infinite;
+    }
+
+    @keyframes coinRotate {
+      from {
+        background-position: 0;
+      }
+
+      to {
+        background-position: -128px;
+      }
+    }
+
+    /* Loading Screen */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--mario-black);
+      color: var(--mario-white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+
+    .logo-anim {
+      font-size: 5rem;
+      text-align: center;
+      margin-bottom: 40px;
+      animation: bounce 0.5s infinite alternate;
+      color: var(--mario-yellow);
+      text-shadow: 8px 8px var(--mario-brick);
+    }
+
+    @keyframes bounce {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-40px);
+      }
+    }
+
+    .press-start {
+      font-size: 3rem;
+      color: var(--mario-white);
+      cursor: pointer;
+      padding: 20px 40px;
+      border: 8px solid var(--mario-white);
+      background: transparent;
+      font-family: 'SuperMario';
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    /* Main UI */
     .wrap {
-      max-width: 1040px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
       display: grid;
-      gap: 16px;
-      animation: rise 640ms ease-out;
+      gap: 30px;
+      z-index: 20;
     }
 
     .hero,
     .panel {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
       background: var(--card);
-      backdrop-filter: blur(4px);
-      box-shadow: var(--shadow);
-      padding: 22px;
+      border: 10px solid var(--mario-black);
+      box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.4);
+      padding: 30px;
+      position: relative;
+    }
+
+    .pulse {
+      animation: boxPulse 0.6s infinite alternate cubic-bezier(0.4, 0, 0.6, 1);
+    }
+
+    @keyframes boxPulse {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.04);
+      }
     }
 
     h1 {
       margin: 0;
-      line-height: 1.15;
-      font-size: clamp(1.75rem, 5vw, 2.8rem);
-    }
-
-    p {
-      margin: 10px 0 0;
-      color: var(--muted);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    h2 {
-      margin: 0 0 8px;
-      font-size: 1.2rem;
+      font-size: 3rem;
+      color: var(--mario-brick);
+      text-align: center;
+      -webkit-text-stroke: 2px var(--mario-black);
     }
 
     .lead {
-      max-width: 72ch;
+      text-align: center;
+      margin: 20px 0;
+      font-size: 1.2rem;
+      color: var(--mario-black);
     }
 
     .file-row {
       display: flex;
-      gap: 10px;
-      margin-top: 14px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 15px;
       align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+      width: 100%;
     }
 
     .file-input {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.84rem;
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 8px;
-      background: rgba(255, 255, 255, 0.7);
-      max-width: 100%;
+      font-family: inherit;
+      padding: 15px;
+      border: 4px solid var(--mario-black);
+      background: var(--mario-white);
+      font-size: 1rem;
+      width: 100%;
+      max-width: 400px;
     }
 
     .btn {
-      border: 0;
-      border-radius: 12px;
-      background: linear-gradient(120deg, var(--accent), #e76a2a);
-      color: #fff;
-      font: 700 0.96rem "Sora", sans-serif;
-      padding: 10px 16px;
+      background: var(--mario-yellow);
+      border: 4px solid var(--mario-black);
+      color: var(--mario-black);
+      padding: 15px 30px;
+      font-family: inherit;
+      font-size: 1.5rem;
       cursor: pointer;
-      transition: transform 180ms ease, filter 180ms ease;
+      box-shadow: 8px 8px 0 var(--mario-brick);
+      transition: transform 0.1s, box-shadow 0.1s;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
-      filter: saturate(1.08);
-    }
-
-    .btn:disabled {
-      cursor: not-allowed;
-      opacity: 0.72;
-      transform: none;
+    .btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: 4px 4px 0 var(--mario-brick);
     }
 
     .status {
-      margin-top: 10px;
-      font-size: 0.95rem;
-      color: var(--muted);
-      min-height: 1.4em;
-    }
-
-    .status.ok {
-      color: var(--ok);
-      font-weight: 600;
-    }
-
-    .status.error {
-      color: var(--warn);
-      font-weight: 600;
-    }
-
-    ul,
-    ol {
-      margin: 10px 0 0;
-      padding-left: 20px;
-    }
-
-    li + li {
-      margin-top: 6px;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 1rem;
     }
 
     .result-shell {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 4px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
     }
 
     .result-box {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.7);
-      padding: 14px;
-      min-height: 220px;
-      display: flex;
-      flex-direction: column;
+      background: var(--mario-white);
+      border: 8px solid var(--mario-black);
+      padding: 15px;
+      min-height: 400px;
     }
 
     .result-title {
-      margin: 0;
-      font-size: 1rem;
-      font-weight: 700;
-    }
-
-    .names {
-      margin-top: 10px;
-      column-count: 3;
-      column-gap: 14px;
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.87rem;
-      line-height: 1.5;
-      word-break: break-word;
-    }
-
-    .name {
-      break-inside: avoid;
-      margin: 0 0 4px;
-      color: #2f2a23;
-    }
-
-    .empty {
-      color: var(--muted);
-      font-style: italic;
-      margin-top: 12px;
+      font-size: 1.2rem;
+      margin: 0 0 15px;
+      color: var(--mario-brush);
+      border-bottom: 4px dashed var(--mario-black);
+      padding-bottom: 10px;
     }
 
     .footer {
-      text-align: right;
-      color: var(--muted);
-      font-size: 0.9rem;
-      padding: 4px 4px 0;
+      position: fixed;
+      bottom: 105px;
+      right: 20px;
+      font-size: 0.8rem;
+      color: var(--mario-white);
+      text-shadow: 2px 2px var(--mario-black);
+      z-index: 100;
     }
 
-    @keyframes rise {
+    #musicToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--mario-yellow);
+      border: 4px solid var(--mario-black);
+      padding: 12px;
+      cursor: pointer;
+      z-index: 1100;
+      font-family: 'SuperMario';
+      font-size: 1rem;
+      display: none;
+    }
+
+    /* Mario Character */
+    #mario {
+      position: fixed;
+      width: 18px;
+      height: 16px;
+      bottom: 96px;
+      left: 100px;
+      background-image: url('./super-midu-bros-main/assets/entities/mario.png');
+      background-size: calc(18px * 6) 16px;
+      background-position: 0 0;
+      z-index: 150;
+      /* Increased to be in front of UI */
+      transform: scale(4);
+      transform-origin: bottom center;
+    }
+
+    .mario-walk {
+      animation: marioWalking 0.3s steps(3) infinite;
+    }
+
+    @keyframes marioWalking {
       from {
-        opacity: 0;
-        transform: translateY(8px);
+        background-position: -18px 0;
       }
+
       to {
-        opacity: 1;
-        transform: translateY(0);
+        background-position: calc(-18px * 4);
       }
+    }
+
+    /* Koopa */
+    .koopa {
+      position: fixed;
+      bottom: 96px;
+      width: 32px;
+      height: 48px;
+      background-image: url('./super-midu-bros-main/assets/entities/koopa.png');
+      background-size: 64px 48px;
+      z-index: 140;
+    }
+
+    .koopa-walk-anim {
+      animation: koopaAnim 0.8s steps(2) infinite;
+    }
+
+    @keyframes koopaAnim {
+      from {
+        background-position: 0;
+      }
+
+      to {
+        background-position: -64px;
+      }
+    }
+
+    .koopa-shell {
+      background-image: url('./super-midu-bros-main/assets/entities/shell.png') !important;
+      background-size: cover !important;
+      width: 32px !important;
+      height: 32px !important;
+      animation: none !important;
+    }
+
+    /* Debug Hitboxes */
+    .debug-hitbox {
+      border: 2px solid rgba(255, 0, 0, 0.6);
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
     }
 
     @media (max-width: 760px) {
-      body {
-        padding: 14px;
-      }
-
-      .hero,
-      .panel {
-        padding: 16px;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
       .result-shell {
         grid-template-columns: 1fr;
       }
 
-      .names {
-        column-count: 2;
+      .logo-anim {
+        font-size: 3rem;
+      }
+
+      h1 {
+        font-size: 2rem;
       }
     }
   </style>
 </head>
+
 <body>
+  <div id="loader">
+    <div class="logo-anim">SUPER<br>ONE-WAY<br>BROS.</div>
+    <button class="press-start" id="startBtn">PRESS START</button>
+  </div>
+
+  <button id="musicToggle">MUSIC: ON</button>
+
+  <div class="scenery-layer">
+    <div class="cloud cloud1" style="top: 5%; animation-duration: 40s;"></div>
+    <div class="cloud cloud2" style="top: 15%; animation-duration: 60s; animation-delay: -10s;"></div>
+    <div class="mountain mountain1"></div>
+    <div class="mountain mountain2"></div>
+
+    <!-- Environment Elements -->
+    <div class="pipe" style="left: 10%;" id="pipe1"></div>
+    <div class="pipe" style="left: 85%;" id="pipe2"></div>
+
+    <!-- Blocks on top of UI containers -->
+    <div class="block ui-block" style="left: 50%; bottom: 300px; transform: translateX(-50%);"></div>
+    <div class="block ui-block" style="left: 30%; bottom: 240px;"></div>
+    <div class="block ui-block" style="left: 70%; bottom: 240px;"></div>
+
+    <div class="coin" style="left: 42%; bottom: 880px;"></div>
+    <div class="coin" style="left: 47%; bottom: 880px;"></div>
+  </div>
+
+  <div class="floor"></div>
+
+  <!-- Entities will be managed by JS -->
+  <div id="entities-container"></div>
+  <div id="mario"></div>
+
   <main class="wrap">
-    <section class="hero">
-      <h1>Instagram One-Way Followers Checker</h1>
-      <p class="lead">
-        This website runs the same core logic as your Python script: it reads your Instagram export ZIP,
-        finds following, followers, and pending request files, then computes who does not follow you back.
-      </p>
+    <section class="hero pulse">
+      <h1>INSTAGRAM CHECKER</h1>
+      <p class="lead">Find out who isn't following you back!</p>
       <div class="file-row">
         <input id="zipInput" class="file-input" type="file" accept=".zip" />
-        <button id="analyzeBtn" class="btn" type="button">Analyze ZIP</button>
+        <button id="analyzeBtn" class="btn" type="button">ANALYZE ZIP</button>
       </div>
       <div id="status" class="status" aria-live="polite"></div>
     </section>
 
-    <section class="panel">
-      <h2>Results</h2>
+    <section class="panel pulse">
+      <h2>WORLD 1-1: RESULTS</h2>
       <div class="result-shell">
         <article class="result-box">
-          <h3 id="nonFollowersTitle" class="result-title">People you follow who do not follow you back (0)</h3>
+          <h3 id="nonFollowersTitle" class="result-title">NON-FOLLOWERS (0)</h3>
           <div id="nonFollowersList" class="names"></div>
-          <p id="nonFollowersEmpty" class="empty">Upload and analyze a ZIP to see results.</p>
+          <p id="nonFollowersEmpty">EMPTY BLOCK...</p>
         </article>
         <article class="result-box">
-          <h3 id="pendingTitle" class="result-title">Pending follow requests (0)</h3>
+          <h3 id="pendingTitle" class="result-title">PENDING (0)</h3>
           <div id="pendingList" class="names"></div>
-          <p id="pendingEmpty" class="empty">Upload and analyze a ZIP to see results.</p>
+          <p id="pendingEmpty">EMPTY BLOCK...</p>
         </article>
       </div>
     </section>
-
-    <div class="footer">Made by Janbacer CC</div>
+    <div class="footer">CREATED BY JANBACER</div>
   </main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-xXDvecyYQ0Z6SgL0z8nxM4G9QfP9fJq0gGf4bm/FvGV8eK3opgDdBrYqKqRR3YKHyCuXapnwYfJOLw1Aun1v8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script>
-    const zipInput = document.getElementById("zipInput");
-    const analyzeBtn = document.getElementById("analyzeBtn");
-    const statusEl = document.getElementById("status");
+  <audio id="bgm" loop>
+    <source src="./super-midu-bros-main/assets/sound/music/overworld/theme.mp3" type="audio/mpeg">
+  </audio>
 
-    const nonFollowersTitle = document.getElementById("nonFollowersTitle");
-    const pendingTitle = document.getElementById("pendingTitle");
-    const nonFollowersList = document.getElementById("nonFollowersList");
-    const pendingList = document.getElementById("pendingList");
-    const nonFollowersEmpty = document.getElementById("nonFollowersEmpty");
-    const pendingEmpty = document.getElementById("pendingEmpty");
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+    const marioEl = document.getElementById("mario");
+    const bgm = document.getElementById("bgm");
+    const loader = document.getElementById("loader");
+    const startBtn = document.getElementById("startBtn");
+    const musicToggle = document.getElementById("musicToggle");
+    const entitiesContainer = document.getElementById("entities-container");
+
+    // Game Constants
+    const gravity = 1.6;
+    const jumpPower = 22; // Increased jump height
+    const walkSpeed = 6;
+    const shellSpeed = 10;
+    const floorY = 96;
+
+    // Game State
+    let mario = { x: 50, y: 0, vx: 0, vy: 0, w: 30, h: 64, isJumping: false, facingRight: true };
+    let keys = { Left: false, Right: false, Up: false };
+    let entities = [
+      { id: 'k1', type: 'koopa', state: 'WALKING', x: 400, y: 0, vx: -1.5, w: 32, h: 48, el: null },
+      { id: 'k2', type: 'koopa', state: 'WALKING', x: 800, y: 0, vx: -1.5, w: 32, h: 48, el: null }
+    ];
+
+    // Static obstacles for collision
+    function getObstacles() {
+      const pipes = Array.from(document.querySelectorAll('.pipe')).map(el => {
+        const rect = el.getBoundingClientRect();
+        // Distance from bottom of viewport
+        const distFromBottom = window.innerHeight - rect.bottom;
+
+        // --- HITBOX TUNING ---
+        const padX = 10;     // Shrink sides
+        const topShift = 10; // Shift top edge down (positive = down)
+
+        return {
+          x: rect.left + padX,
+          y: distFromBottom - floorY + topShift, // Relative to floorY
+          w: rect.width - (padX * 2),
+          h: rect.height - topShift
+        };
+      });
+      const blocks = Array.from(document.querySelectorAll('.block')).map(el => {
+        const rect = el.getBoundingClientRect();
+        const distFromBottom = window.innerHeight - rect.bottom;
+        return {
+          x: rect.left,
+          y: distFromBottom - floorY,
+          w: rect.width,
+          h: rect.height
+        };
+      });
+      return [...pipes, ...blocks];
+    }
+
+    function checkCollision(objA, objB) {
+      return objA.x < objB.x + objB.w &&
+        objA.x + objA.w > objB.x &&
+        objA.y < objB.y + objB.h &&
+        objA.y + objA.h > objB.y;
+    }
+
+    function renderDebugHitbox(obj, color = 'red') {
+      let debugEl = document.getElementById('debug-' + (obj.id || 'mario' || Math.random()));
+      if (!debugEl) {
+        debugEl = document.createElement('div');
+        if (obj.id) debugEl.id = 'debug-' + obj.id;
+        debugEl.className = 'debug-hitbox';
+        document.body.appendChild(debugEl);
+      }
+      debugEl.style.left = obj.x + 'px';
+      debugEl.style.bottom = (floorY + obj.y) + 'px';
+      debugEl.style.width = obj.w + 'px';
+      debugEl.style.height = obj.h + 'px';
+      debugEl.style.borderColor = color;
+    }
+
+    function clearDebugHitboxes() {
+      // Clear obstacle/coin debug boxes which change frequently
+      document.querySelectorAll('.debug-hitbox').forEach(el => {
+        if (!el.id.includes('mario') && !el.id.includes('k')) el.remove();
+      });
+    }
+
+    // Input handlers
+    window.addEventListener('keydown', e => {
+      const key = e.key.toLowerCase();
+      if (key === 'arrowleft' || key === 'a') keys.Left = true;
+      if (key === 'arrowright' || key === 'd') keys.Right = true;
+      if (key === 'arrowup' || key === 'w') keys.Up = true;
+    });
+    window.addEventListener('keyup', e => {
+      const key = e.key.toLowerCase();
+      if (key === 'arrowleft' || key === 'a') keys.Left = false;
+      if (key === 'arrowright' || key === 'd') keys.Right = false;
+      if (key === 'arrowup' || key === 'w') keys.Up = false;
+    });
+
+    function initEntities() {
+      entities.forEach(ent => {
+        const el = document.createElement('div');
+        el.className = 'koopa koopa-walk-anim';
+        entitiesContainer.appendChild(el);
+        ent.el = el;
+      });
+    }
+
+    function updateGame() {
+      const obs = getObstacles();
+
+      // Coin Collection
+      const coins = document.querySelectorAll('.coin');
+      coins.forEach(coinEl => {
+        const rect = coinEl.getBoundingClientRect();
+        const cObj = { x: rect.left, y: window.innerHeight - rect.bottom, w: rect.width, h: rect.height };
+        if (checkCollision({ x: mario.x, y: mario.y, w: mario.w, h: mario.h }, cObj)) {
+          coinEl.remove();
+        }
+      });
+
+      // Mario Horizontal
+      if (keys.Left) { mario.vx = -walkSpeed; mario.facingRight = false; }
+      else if (keys.Right) { mario.vx = walkSpeed; mario.facingRight = true; }
+      else mario.vx = 0;
+
+      const nextX = mario.x + mario.vx;
+      let canMoveX = true;
+      obs.forEach(o => {
+        if (checkCollision({ x: nextX, y: mario.y, w: mario.w, h: mario.h }, o)) canMoveX = false;
+      });
+      if (canMoveX) mario.x = nextX;
+
+      // Mario Vertical
+      if (keys.Up && !mario.isJumping) { mario.vy = jumpPower; mario.isJumping = true; }
+      mario.vy -= gravity;
+      const nextY = mario.y + mario.vy;
+      let canMoveY = true;
+
+      if (nextY <= 0) {
+        mario.y = 0;
+        mario.vy = 0;
+        mario.isJumping = false;
+        canMoveY = false;
+      }
+
+      obs.forEach(o => {
+        if (checkCollision({ x: mario.x, y: nextY, w: mario.w, h: mario.h }, o)) {
+          if (mario.vy < 0) { // Falling/Landing on top
+            mario.y = o.y + o.h;
+            mario.vy = 0;
+            mario.isJumping = false;
+          } else { // Hitting from below
+            mario.vy = -2; // Bounce back down
+          }
+          canMoveY = false;
+        }
+      });
+      if (canMoveY) mario.y = nextY;
+
+      // Update Mario Visuals
+      marioEl.style.left = mario.x + 'px';
+      marioEl.style.bottom = (floorY + mario.y) + 'px';
+      marioEl.style.transform = `scale(4) scaleX(${mario.facingRight ? 1 : -1})`;
+      if (mario.isJumping) marioEl.style.backgroundPosition = '-90px 0';
+      else if (Math.abs(mario.vx) > 0) marioEl.classList.add('mario-walk');
+      else { marioEl.classList.remove('mario-walk'); marioEl.style.backgroundPosition = '0 0'; }
+
+      // Update Entities
+      entities.forEach(ent => {
+        // Horizontal Movement
+        if (ent.state === 'WALKING') {
+          ent.x += ent.vx;
+          // Check for floor/wall boundaries
+          if (ent.x < 0) { ent.x = 0; ent.vx = Math.abs(ent.vx); }
+          if (ent.x > window.innerWidth - ent.w) { ent.x = window.innerWidth - ent.w; ent.vx = -Math.abs(ent.vx); }
+          // Obstacle collision
+          obs.forEach(o => {
+            if (checkCollision(ent, o)) {
+              if (ent.vx > 0) { ent.x = o.x - ent.w; ent.vx = -Math.abs(ent.vx); }
+              else { ent.x = o.x + o.w; ent.vx = Math.abs(ent.vx); }
+            }
+          });
+        } else if (ent.state === 'SLIDING') {
+          ent.x += ent.vx;
+          if (ent.x < 0) { ent.x = 0; ent.vx = Math.abs(ent.vx); }
+          if (ent.x > window.innerWidth - ent.w) { ent.x = window.innerWidth - ent.w; ent.vx = -Math.abs(ent.vx); }
+          obs.forEach(o => {
+            if (checkCollision(ent, o)) {
+              // Bounce off obstacles instead of stopping
+              if (ent.vx > 0) {
+                ent.x = o.x - ent.w;
+                ent.vx = -Math.abs(ent.vx);
+              } else {
+                ent.x = o.x + o.w;
+                ent.vx = Math.abs(ent.vx);
+              }
+            }
+          });
+        }
+
+        // Mario Interaction
+        if (checkCollision(mario, ent)) {
+          // Landing on top (stomp)
+          if (mario.vy < 0 && (mario.y + (mario.h * 0.2)) > (ent.y + ent.h)) {
+            if (ent.state === 'WALKING' || ent.state === 'SLIDING') {
+              ent.state = 'SHELL';
+              ent.vx = 0;
+              ent.el.classList.add('koopa-shell');
+              mario.vy = 14; // Rebound Mario
+            } else if (ent.state === 'SHELL') {
+              ent.state = 'SLIDING';
+              ent.vx = (mario.x + mario.w / 2 < ent.x + ent.w / 2) ? shellSpeed : -shellSpeed;
+              mario.vy = 10;
+            }
+          } else {
+            // Side contact
+            if (ent.state === 'SHELL') {
+              ent.state = 'SLIDING';
+              ent.vx = (mario.x + mario.w / 2 < ent.x + ent.w / 2) ? shellSpeed : -shellSpeed;
+              // Move slightly to avoid instant re-collision
+              ent.x += ent.vx > 0 ? 5 : -5;
+            } else if (ent.state === 'WALKING' || ent.state === 'SLIDING') {
+              // In a real game Mario would take damage here
+              // For now, let's just bounce Mario back
+              mario.vx = (mario.x < ent.x) ? -10 : 10;
+            }
+          }
+        }
+
+        ent.el.style.left = ent.x + 'px';
+        ent.el.style.bottom = (floorY + ent.y) + 'px';
+        ent.el.style.transform = `scaleX(${ent.vx >= 0 ? -1 : 1})`;
+        renderDebugHitbox(ent, 'orange');
+      });
+
+      // Render Obstacle Hitboxes
+      clearDebugHitboxes();
+      obs.forEach((o, i) => {
+        renderDebugHitbox({ ...o, id: 'obs-' + i }, 'red');
+      });
+      // Render Mario Hitbox
+      renderDebugHitbox({ ...mario, id: 'mario' }, 'green');
+
+      requestAnimationFrame(updateGame);
+    }
+
+    startBtn.addEventListener('click', () => {
+      bgm.play().catch(e => console.log(e));
+      loader.style.opacity = '0';
+      setTimeout(() => {
+        loader.style.display = 'none';
+        musicToggle.style.display = 'block';
+        initEntities();
+        updateGame();
+      }, 500);
+    });
+
+    musicToggle.addEventListener('click', () => {
+      if (bgm.paused) { bgm.play(); musicToggle.textContent = "MUSIC: ON"; }
+      else { bgm.pause(); musicToggle.textContent = "MUSIC: OFF"; }
+    });
 
     const followingNames = ["following.html", "following.json"];
     const followersNames = ["followers.html", "followers_1.html", "followers.json", "followers_1.json"];
     const pendingNames = ["pending_follow_requests.html", "pending_follow_requests.json"];
 
     function setStatus(text, kind = "") {
+      const statusEl = document.getElementById("status");
       statusEl.textContent = text;
-      statusEl.className = kind ? `status ${kind}` : "status";
+      statusEl.style.color = kind === "error" ? "red" : (kind === "ok" ? "green" : "black");
     }
 
     function parseHtmlUsernames(content) {
@@ -304,58 +784,34 @@
     function parseJsonUsernames(content) {
       const data = JSON.parse(content);
       const usernames = new Set();
-
       function parseEntry(entry) {
-        if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
-          return;
-        }
-
-        if (typeof entry.title === "string" && entry.title.trim()) {
-          usernames.add(entry.title.trim());
-        }
-
+        if (!entry || typeof entry !== "object" || Array.isArray(entry)) return;
+        if (typeof entry.title === "string" && entry.title.trim()) usernames.add(entry.title.trim());
         if (Array.isArray(entry.string_list_data)) {
           for (const item of entry.string_list_data) {
-            if (item && typeof item.value === "string" && item.value.trim()) {
-              usernames.add(item.value.trim());
-            }
+            if (item && typeof item.value === "string" && item.value.trim()) usernames.add(item.value.trim());
           }
         }
-
-        if (typeof entry.value === "string" && entry.value.trim()) {
-          usernames.add(entry.value.trim());
-        }
+        if (typeof entry.value === "string" && entry.value.trim()) usernames.add(entry.value.trim());
       }
-
       function walk(node) {
         if (Array.isArray(node)) {
-          for (const item of node) {
-            parseEntry(item);
-            walk(item);
-          }
+          for (const item of node) { parseEntry(item); walk(item); }
           return;
         }
-
         if (node && typeof node === "object") {
           parseEntry(node);
-          for (const value of Object.values(node)) {
-            walk(value);
-          }
+          for (const value of Object.values(node)) walk(value);
         }
       }
-
       walk(data);
       return usernames;
     }
 
     async function extractUsernamesFromZipEntry(entry) {
       const content = await entry.async("string");
-      if (entry.name.toLowerCase().endsWith(".html")) {
-        return parseHtmlUsernames(content);
-      }
-      if (entry.name.toLowerCase().endsWith(".json")) {
-        return parseJsonUsernames(content);
-      }
+      if (entry.name.toLowerCase().endsWith(".html")) return parseHtmlUsernames(content);
+      if (entry.name.toLowerCase().endsWith(".json")) return parseJsonUsernames(content);
       return new Set();
     }
 
@@ -367,20 +823,14 @@
           const name = entry.name.toLowerCase();
           return name === lowerCandidate || name.endsWith("/" + lowerCandidate);
         });
-        if (found) {
-          return found;
-        }
+        if (found) return found;
       }
       return null;
     }
 
     function setDifference(source, subtract) {
       const result = [];
-      for (const item of source) {
-        if (!subtract.has(item)) {
-          result.push(item);
-        }
-      }
+      for (const item of source) { if (!subtract.has(item)) result.push(item); }
       return result;
     }
 
@@ -401,29 +851,31 @@
     }
 
     async function analyzeZip() {
-      const file = zipInput.files[0];
-      if (!file) {
-        setStatus("Select your Instagram ZIP file first.", "error");
-        return;
-      }
+      const zipInput = document.getElementById("zipInput");
+      const analyzeBtn = document.getElementById("analyzeBtn");
 
-      if (typeof JSZip === "undefined") {
-        setStatus("Could not load JSZip dependency. Refresh and try again.", "error");
-        return;
-      }
+      const nonFollowersTitle = document.getElementById("nonFollowersTitle");
+      const pendingTitle = document.getElementById("pendingTitle");
+      const nonFollowersList = document.getElementById("nonFollowersList");
+      const pendingList = document.getElementById("pendingList");
+      const nonFollowersEmpty = document.getElementById("nonFollowersEmpty");
+      const pendingEmpty = document.getElementById("pendingEmpty");
+
+      const file = zipInput.files[0];
+      if (!file) { setStatus("SELECT ZIP FIRST!", "error"); return; }
+      if (typeof JSZip === "undefined") { setStatus("JSZIP MISSING!", "error"); return; }
 
       analyzeBtn.disabled = true;
-      setStatus("Reading ZIP and analyzing files...");
+      setStatus("ANALYZING...");
 
       try {
         const zip = await JSZip.loadAsync(file);
-
         const followingFile = findZipFile(zip, followingNames);
         const followersFile = findZipFile(zip, followersNames);
         const pendingFile = findZipFile(zip, pendingNames);
 
         if (!followingFile || !followersFile) {
-          setStatus("Could not find both following and followers files in the ZIP.", "error");
+          setStatus("FILES NOT FOUND!", "error");
           return;
         }
 
@@ -437,32 +889,21 @@
           pendingRequests = Array.from(pendingSet).sort((a, b) => a.localeCompare(b));
         }
 
-        nonFollowersTitle.textContent = `People you follow who do not follow you back (${nonFollowers.length})`;
-        pendingTitle.textContent = `Pending follow requests (${pendingRequests.length})`;
+        nonFollowersTitle.textContent = `NON-FOLLOWERS (${nonFollowers.length})`;
+        pendingTitle.textContent = `PENDING (${pendingRequests.length})`;
 
-        renderNames(
-          nonFollowersList,
-          nonFollowersEmpty,
-          nonFollowers,
-          "Everyone you follow follows you back."
-        );
+        renderNames(nonFollowersList, nonFollowersEmpty, nonFollowers, "ALL GOOD!");
+        renderNames(pendingList, pendingEmpty, pendingRequests, "NONE FOUND!");
 
-        renderNames(
-          pendingList,
-          pendingEmpty,
-          pendingRequests,
-          "No pending follow requests found."
-        );
-
-        setStatus("Analysis complete. Results updated.", "ok");
+        setStatus("COMPLETE!", "ok");
       } catch (error) {
-        setStatus(`Failed to process ZIP: ${error.message}`, "error");
+        setStatus(`ERROR: ${error.message}`, "error");
       } finally {
         analyzeBtn.disabled = false;
       }
     }
-
-    analyzeBtn.addEventListener("click", analyzeZip);
+    document.getElementById("analyzeBtn").addEventListener("click", analyzeZip);
   </script>
 </body>
+
 </html>
