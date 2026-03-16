@@ -7,11 +7,27 @@ This tool helps you analyze your Instagram data export to find out:
 - Who you follow that doesn't follow you back
 - Your pending follow requests
 
+Working as of 12-03-2026, Instagram version 420.0.0.55.74.
+
 ## Features
 
 - Simple graphical interface (Tkinter)
 - Supports both HTML and JSON Instagram data exports
 - Displays results in easy-to-read columns
+
+## Dependencies
+
+- Python 3.9+
+- beautifulsoup4
+
+Install dependency:
+
+```sh
+python -m pip install --user beautifulsoup4
+```
+
+Notes:
+- `tkinter`, `json`, `zipfile`, `tempfile`, `math`, and `os` are part of Python standard library.
 
 ## How to Use
 
