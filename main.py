@@ -17,27 +17,32 @@ def extract_usernames_from_json(file_path):
     with open(file_path, encoding="utf-8") as f:
         data = json.load(f)
         usernames = set()
+
+        def parse_entry(entry):
+            if not isinstance(entry, dict):
+                return
+            # 1. Try "title" (often contains the username in following.json)
+            if "title" in entry and entry["title"]:
+                usernames.add(entry["title"].strip())
+            # 2. Try "string_list_data" -> "value"
+            if "string_list_data" in entry and isinstance(entry["string_list_data"], list):
+                for item in entry["string_list_data"]:
+                    if isinstance(item, dict) and "value" in item:
+                        usernames.add(item["value"].strip())
+            # 3. Try direct "value"
+            if "value" in entry and entry["value"]:
+                usernames.add(entry["value"].strip())
+
         if isinstance(data, list):
             for entry in data:
-                # Handle {"string_list_data": [...]}
-                if isinstance(entry, dict) and "string_list_data" in entry:
-                    for item in entry["string_list_data"]:
-                        if "value" in item:
-                            usernames.add(item["value"].strip())
-                # Handle {"value": ...}
-                elif isinstance(entry, dict) and "value" in entry:
-                    usernames.add(entry["value"].strip())
+                parse_entry(entry)
         elif isinstance(data, dict):
-            for key in data:
-                if isinstance(data[key], list):
-                    for entry in data[key]:
-                        if isinstance(entry, dict):
-                            if "string_list_data" in entry:
-                                for item in entry["string_list_data"]:
-                                    if "value" in item:
-                                        usernames.add(item["value"].strip())
-                            elif "value" in entry:
-                                usernames.add(entry["value"].strip())
+            for value in data.values():
+                if isinstance(value, list):
+                    for entry in value:
+                        parse_entry(entry)
+                elif isinstance(value, dict):
+                    parse_entry(value)
         return usernames
 
 def find_file(filenames, root_dir="."):
